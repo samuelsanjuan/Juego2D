@@ -1,18 +1,21 @@
+import java.io.File
 import java.util.*
+import kotlin.collections.ArrayList
 
 var jugando:Boolean=false
-val objetos= arrayListOf<Objetos>(
-    Enemigo(5,5,4,10,1),
-    Enemigo(6,8,5,10,1,),
-    Obstaculo(10,10),
-    Obstaculo(10,9))
-
-val mapa=Mapa(objetos)
-
+var objetos=ArrayList<Objetos>()
+val niveles=Niveles()
+var nivelActual= File("src/main/resources/Partida").inputStream().bufferedReader().readLine().toInt()
 fun main(args: Array<String>) {
 
+    print(nivelActual)
+    cargar()
     menu()
 
+}
+
+fun cargar(){
+    getNivel()
 }
 
 fun menu(){
@@ -20,16 +23,15 @@ fun menu(){
     jugando=false
 
     val opcionSeleccionada:String=opcionMenu()
-    
+
     when(opcionSeleccionada){
-        
+
         "jugar"-> jugar()
         "opciones"-> opciones()
         "salir"->guardarSalir()
         else->{
             println("ninguna opcion seleccionada")
         }
-
     }
 }
 
@@ -41,6 +43,8 @@ fun guardarSalir(){
 
 
 fun guardar(){
+
+    getNivel()
 
 }
 
@@ -95,16 +99,23 @@ fun jugar(){
 
     jugando=true
 
-    cargarNivel(1)
+    cargarNivel(getNivel())
 
 }
 
 
 fun cargarNivel(nivel: Int) {
 
+    objetos.clear()
+    objetos=niveles.Niveles[nivel-1]
     cargarTiles(nivel)
     cargarObejtos(nivel)
 
+}
+fun getNivel():Int{
+    var nivel=1
+
+    return nivel
 }
 
 fun cargarTiles(nivel: Int){
@@ -123,7 +134,6 @@ fun cargarObejtos(nivel: Int){
 
 fun cargarEnemigos(nivel: Int){
     println("cargando Enemigos")
-    mapa.moverEnemigos()
 }
 fun cargarNPCS(nivel: Int){
     println("cargando npcs")

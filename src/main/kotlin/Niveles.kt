@@ -1,19 +1,15 @@
 class Niveles(){
 
-    val objetos= arrayListOf<Objetos>(
-        Enemigo(5,5,4,10,1),
-        Enemigo(6,8,5,10,1),
-        Obstaculo(0,0),
-        Obstaculo(0,1),
-        Obstaculo(0,2),
-        Obstaculo(1,0),
-        Obstaculo(1,1),
-        Obstaculo(2,0))
+    val Niveles=ArrayList<ArrayList<Objetos>>()
 
-    fun pruebaEnemigo(){
+    public val objetosNivel1= arrayListOf<Objetos>(
+        Enemigo(5,5,4,10,1,1,1),
+        Enemigo(6,8,5,10,1,1,1),
+        Obstaculo(0,0,10,10),
+        Obstaculo(10,10,-10,-10)
+    )
 
-        val mapa=Mapa(objetos)
-
+    init {
+        Niveles.add(objetosNivel1)
     }
-
 }
