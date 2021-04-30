@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 class Mapa (objetos: ArrayList<Objetos>){
 
     val objetos=objetos

@@ -11,4 +11,8 @@ abstract class Objetos (x:Int,y:Int,tipo:String,solido:Boolean,hitboxX:Int,hitbo
             y=yFinal
         }
     }
+
+    override fun toString(): String {
+        return "Posicion = ("+x+","+y+")-("+(hitboxX+x)+","+(hitboxY+y)+") Tipo : "+tipo
+    }
 }

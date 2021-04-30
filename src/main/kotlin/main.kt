@@ -1,24 +1,32 @@
+import com.sun.java.accessibility.util.AWTEventMonitor.addKeyListener
 import java.io.File
 import java.util.*
-import kotlin.collections.ArrayList
 
 var jugando:Boolean=false
 var objetos=ArrayList<Objetos>()
 val niveles=Niveles()
-var nivelActual= File("src/main/resources/Partida").inputStream().bufferedReader().readLine().toInt()
+val ArchivoNivel= File("src/main/resources/Partida.txt")
+var nivelActual= ArchivoNivel
+    .inputStream()
+    .bufferedReader()
+    .readLine()
+val teclado=ControlesTeclado()
+val jugador=Jugador(1,1,teclado)
+
 fun main(args: Array<String>) {
 
-    print(nivelActual)
-    cargar()
+    while (true){
+        jugador.actualizar()
+    }
+
+   print(nivelActual)
     menu()
 
 }
 
-fun cargar(){
-    getNivel()
-}
-
 fun menu(){
+
+    addKeyListener(teclado)
 
     jugando=false
 
@@ -43,11 +51,10 @@ fun guardarSalir(){
 
 
 fun guardar(){
-
-    getNivel()
-
+    ArchivoNivel.delete()
+    ArchivoNivel.createNewFile()
+    ArchivoNivel.writeText(nivelActual)
 }
-
 
 fun salir(){
 
@@ -99,52 +106,49 @@ fun jugar(){
 
     jugando=true
 
-    cargarNivel(getNivel())
+    cargarNivel()
 
 }
 
 
-fun cargarNivel(nivel: Int) {
+fun cargarNivel() {
 
     objetos.clear()
-    objetos=niveles.Niveles[nivel-1]
-    cargarTiles(nivel)
-    cargarObejtos(nivel)
+    objetos=niveles.Niveles[nivelActual.toInt()-1]
+    for (objeto in objetos)
+        println(objeto.toString())
+    cargarTiles()
+    cargarObejtos()
 
 }
-fun getNivel():Int{
-    var nivel=1
 
-    return nivel
-}
-
-fun cargarTiles(nivel: Int){
+fun cargarTiles(){
     println("cargando Tiles")
 }
 
-fun cargarObejtos(nivel: Int){
+fun cargarObejtos(){
 
-    cargarObstaculos(nivel)
-    cargarPickeables(nivel)
-    cargarNPCS(nivel)
-    cargarEnemigos(nivel)
-    cargarJugador(nivel)
+    cargarObstaculos()
+    cargarPickeables()
+    cargarNPCS()
+    cargarEnemigos()
+    cargarJugador()
 
 }
 
-fun cargarEnemigos(nivel: Int){
+fun cargarEnemigos(){
     println("cargando Enemigos")
 }
-fun cargarNPCS(nivel: Int){
+fun cargarNPCS(){
     println("cargando npcs")
 }
-fun cargarPickeables(nivel: Int){
+fun cargarPickeables(){
     println("cargando pickeables")
 }
-fun cargarJugador(nivel: Int){
+fun cargarJugador(){
     println("cargando jugador")
 }
-fun cargarObstaculos(nivel: Int){
+fun cargarObstaculos(){
     println("cargando obstaculos")
 }
 
