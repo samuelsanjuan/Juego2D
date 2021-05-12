@@ -1,44 +1,33 @@
-import com.sun.java.accessibility.util.AWTEventMonitor.addKeyListener
 import java.io.File
 import java.util.*
 
 var jugando:Boolean=false
+var enEjecucion=false
 var objetos=ArrayList<Objetos>()
 val niveles=Niveles()
 val ArchivoNivel= File("src/main/resources/Partida.txt")
-var nivelActual= ArchivoNivel
-    .inputStream()
-    .bufferedReader()
-    .readLine()
+var nivelActual = ArchivoNivel.inputStream().bufferedReader().readLine()
 val jugador=Jugador(1,1)
 val ventana:Ventana= Ventana()
+val longitudNivel=100
 
 
 fun main(args: Array<String>) {
-
-    ventana.inicializarVentana(1680,1020)
+    enEjecucion=true
+    ventana.inicializarVentana(720,480)
 
     print(nivelActual)
-    menu()
-
+    if(enEjecucion){
+        menu()
+    }
 }
-
 
 fun menu(){
 
     jugando=false
 
-    val opcionSeleccionada:String=opcionMenu()
+    ventana.menuVisible()
 
-    when(opcionSeleccionada){
-
-        "jugar"-> jugar()
-        "opciones"-> opciones()
-        "salir"->guardarSalir()
-        else->{
-            println("ninguna opcion seleccionada")
-        }
-    }
 }
 
 
@@ -47,7 +36,6 @@ fun guardarSalir(){
     salir()
 }
 
-
 fun guardar(){
     ArchivoNivel.delete()
     ArchivoNivel.createNewFile()
@@ -55,15 +43,7 @@ fun guardar(){
 }
 
 fun salir(){
-
-}
-
-
-fun opcionMenu():String{
-    val scan = Scanner(System.`in`)
-
-    val n = scan.nextLine()
-    return n
+    enEjecucion=false
 }
 
 
@@ -71,10 +51,8 @@ fun opciones(){
     abrirAjustes()
 }
 
-
 fun abrirAjustes(){
-    val ajuste:String
-    ajuste="resolucion"
+    var ajuste:String="resolucion"
     when(ajuste){
 
         "resolucion"->ajustesResolucion()
@@ -84,48 +62,61 @@ fun abrirAjustes(){
     }
 }
 
-
 fun ajustesAudio(){
     println("ajustando audio")
 }
-
 
 fun ajustesControles(){
     println("ajustando controles")
 }
 
-
 fun ajustesResolucion(){
     println("ajustando resolucion")
+
     ventana.changeResoulution(1000,1000)
 }
 
 
 fun jugar(){
 
-    jugando=true
+    ventana.menuInvisible()
 
-    cargarNivel()
+    jugando= true
 
+    while (jugando==true) {
+        cargarNivel()
+    }
+    menu()
 }
 
 
 fun cargarNivel() {
 
-    objetos.clear()
-    objetos=niveles.Niveles[nivelActual.toInt()-1]
-    for (objeto in objetos)
-        println(objeto.toString())
-    cargarTiles()
-    cargarObejtos()
+    if (jugador.x in 0..longitudNivel) {
 
+        objetos.clear()
+        objetos = niveles.Niveles[nivelActual.toInt() - 1]
+        for (objeto in objetos)
+            println(objeto.toString())
+        cargarTiles()
+
+        realentizar()
+    }
+    else if (jugador.x>longitudNivel){
+        nivelActual="${nivelActual.toInt()+1}"
+        jugador.x=0
+    }
+    else if (jugador.x<0){
+        nivelActual="${nivelActual.toInt()-1}"
+        jugador.x=longitudNivel
+    }
 }
 
 fun cargarTiles(){
-    println("cargando Tiles")
+
 }
 
-fun cargarObejtos(){
+fun cargarObjetos(){
 
     cargarObstaculos()
     cargarPickeables()
@@ -136,18 +127,54 @@ fun cargarObejtos(){
 }
 
 fun cargarEnemigos(){
-    println("cargando Enemigos")
-}
-fun cargarNPCS(){
-    println("cargando npcs")
-}
-fun cargarPickeables(){
-    println("cargando pickeables")
-}
-fun cargarJugador(){
-    println("cargando jugador")
-}
-fun cargarObstaculos(){
-    println("cargando obstaculos")
 }
 
+fun cargarNPCS(){
+}
+
+fun cargarPickeables(){
+}
+
+fun cargarJugador(){
+
+    jugador.actualizar()
+    if (ControlesTeclado.menu==true){
+        jugando=false
+    }
+}
+
+fun cargarObstaculos(){
+}
+
+
+fun realentizar() {
+
+    val nsPorSegundo = 1000000000
+    val apsObjetivo: Byte = 60
+    val nsPorActualizacion = (nsPorSegundo / apsObjetivo).toDouble()
+
+    var referenciaActualizacion = System.nanoTime()
+    var referenciaContador = System.nanoTime()
+
+    var tiempoTranscurrido: Double
+    var delta = 0.0
+
+    while (jugando&&jugador.x in 0..longitudNivel) {
+
+        val inicioBucle = System.nanoTime()
+
+        tiempoTranscurrido = (inicioBucle - referenciaActualizacion).toDouble()
+        referenciaActualizacion = inicioBucle
+
+        delta += tiempoTranscurrido / nsPorActualizacion
+
+        while (delta >= 1) {
+            cargarObjetos()
+            delta--
+        }
+
+        if (System.nanoTime() - referenciaContador > nsPorSegundo) {
+            referenciaContador = System.nanoTime()
+        }
+    }
+}

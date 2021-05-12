@@ -29,13 +29,13 @@ object ControlesTeclado:KeyListener{
     }
 
     override fun keyTyped(e: KeyEvent?) {
-        if (e != null) {
-            teclas[e.keyCode]=true
-        }
+
     }
 
     override fun keyPressed(e: KeyEvent?) {
-
+        if (e != null) {
+            teclas[e.keyCode]=true
+        }
     }
 
     override fun keyReleased(e: KeyEvent?) {
