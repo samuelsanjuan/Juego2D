@@ -10,23 +10,21 @@ var nivelActual= ArchivoNivel
     .inputStream()
     .bufferedReader()
     .readLine()
-val teclado=ControlesTeclado()
-val jugador=Jugador(1,1,teclado)
+val jugador=Jugador(1,1)
+val ventana:Ventana= Ventana()
+
 
 fun main(args: Array<String>) {
 
-    while (true){
-        jugador.actualizar()
-    }
+    ventana.inicializarVentana(1680,1020)
 
-   print(nivelActual)
+    print(nivelActual)
     menu()
 
 }
 
-fun menu(){
 
-    addKeyListener(teclado)
+fun menu(){
 
     jugando=false
 
@@ -99,6 +97,7 @@ fun ajustesControles(){
 
 fun ajustesResolucion(){
     println("ajustando resolucion")
+    ventana.changeResoulution(1000,1000)
 }
 
 

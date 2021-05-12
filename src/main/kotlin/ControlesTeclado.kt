@@ -1,7 +1,7 @@
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 
-class ControlesTeclado :KeyListener{
+object ControlesTeclado:KeyListener{
 
     val NUMERO_TECLAS=120
     val teclas = arrayOfNulls<Boolean>(NUMERO_TECLAS)
@@ -29,17 +29,19 @@ class ControlesTeclado :KeyListener{
     }
 
     override fun keyTyped(e: KeyEvent?) {
-
-    }
-
-    override fun keyPressed(e: KeyEvent?) {
         if (e != null) {
             teclas[e.keyCode]=true
         }
     }
 
-    override fun keyReleased(e: KeyEvent?) {
+    override fun keyPressed(e: KeyEvent?) {
 
+    }
+
+    override fun keyReleased(e: KeyEvent?) {
+        if (e!=null){
+            teclas[e.keyCode]=false
+        }
     }
 
 

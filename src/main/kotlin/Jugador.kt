@@ -1,24 +1,25 @@
-class Jugador (x:Int, y:Int,teclado:ControlesTeclado):Objetos(x,y,"Jugador",true,hitboxX = 1,hitboxY = 1){
+class Jugador (x:Int, y:Int):Objetos(x,y,"Jugador",true,hitboxX = 1,hitboxY = 1){
 
-    val teclado =teclado
     var enMovimiento=false
 
     fun actualizar(){
 
+        ControlesTeclado.actualizar()
+
         var desplazamientoX=0
         var desplazamientoY=0
 
-        if(teclado.arriba!!){
-            desplazamientoY-=2
+        if(ControlesTeclado.arriba == true){
+            desplazamientoY-=1
         }
-        if (teclado.abajo!!){
-            desplazamientoY+=2
+        if (ControlesTeclado.abajo== true){
+            desplazamientoY+=1
         }
-        if (teclado.izquierda!!){
-            desplazamientoX-=2
+        if (ControlesTeclado.izquierda== true){
+            desplazamientoX-=1
         }
-        if (teclado.derecha!!){
-            desplazamientoX+=2
+        if (ControlesTeclado.derecha==true){
+            desplazamientoX+=1
         }
         if (desplazamientoX!=0||desplazamientoY!=0){
             enMovimiento=true
