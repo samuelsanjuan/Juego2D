@@ -2,6 +2,11 @@ class Jugador (x:Int, y:Int):Objetos(x,y,"Jugador",true,hitboxX = 1,hitboxY = 1)
 
     var enMovimiento=false
 
+    //stats
+
+    val vidaMaxima=100
+    var vida=vidaMaxima
+
     fun actualizar(){
 
         var desplazamientoX=0
@@ -32,7 +37,7 @@ class Jugador (x:Int, y:Int):Objetos(x,y,"Jugador",true,hitboxX = 1,hitboxY = 1)
         x+=xMovimiento
         y+=yMovimiento
 
-        println("($x , $y)")
+        println("J:($x , $y) $nivelActual, $vida")
 
 
     }

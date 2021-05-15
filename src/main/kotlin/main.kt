@@ -5,16 +5,22 @@ import java.lang.Thread.sleep
 import java.util.*
 import javax.swing.JFrame
 import javax.swing.JPanel
+import kotlin.collections.ArrayList
 
 var enEjecucion=false
 val niveles=Niveles()
 var jugando:Boolean=false
 var objetos=ArrayList<Objetos>()
+var obstaculos=ArrayList<Objetos>()
+var enemigos=ArrayList<Objetos>()
 val ArchivoNivel= File("src/main/resources/Partida.txt")
 var nivelActual = ArchivoNivel.inputStream().bufferedReader().readLine().toInt()
 val jugador=Jugador(1,1)
 val longitudNivel=100
-var menuOpcion:String="jugar"
+var menuOpcion:String=""
+var ajustesOpcion:String=""
+val en1=Enemigo(50,50,2,4,2,1,1,10,5)
+
 
 val ventana = JFrame("juego")
 val menu = JPanel()
@@ -22,17 +28,19 @@ val botonJugar = Button("Jugar")
 val botonOpciones = Button("Opciones")
 val botonSalir = Button("Salir")
 
-fun main(args: Array<String>) {
+fun main() {
 
-        ventana.setSize(720, 480)
-        ventana.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
-        ventana.addKeyListener(ControlesTeclado)
 
-        menu.layout = GridLayout(3, 1)
-        menu.add(botonJugar)
-        menu.add(botonOpciones)
-        menu.add(botonSalir)
-        ventana.add(menu)
+    ventana.setSize(720, 480)
+    ventana.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
+    ventana.addKeyListener(ControlesTeclado)
+
+    menu.layout = GridLayout(3, 1)
+    menu.add(botonJugar)
+    menu.add(botonOpciones)
+    menu.add(botonSalir)
+    ventana.add(menu)
+
     ventana.isVisible=true
 
         botonJugar.addActionListener() {
@@ -82,7 +90,7 @@ fun menu(){
             }
 
             else -> {
-                println("error")
+                print("")
             }
         }
 
@@ -103,10 +111,19 @@ fun guardar(){
 
 fun salir(){
     enEjecucion=false
+    System.exit(0)
 }
 
 
 fun abrirAjustes(){
+
+    do {
+        when (ajustesOpcion){
+            "audio"->ajustesAudio()
+            "controles"->ajustesControles()
+            "resolucion"->ajustesResolucion(100,100)
+        }
+    }while (ajustesOpcion!="audio"||ajustesOpcion!="controles"||ajustesOpcion!="resolucion")
 
 }
 
@@ -128,34 +145,33 @@ fun ajustesResolucion(width:Int,height:Int){
 fun jugar(){
 
     while (jugando==true) {
-        cargarNivel(nivelActual)
+        cargarNivel()
     }
-
     menu()
 }
 
-
-fun cargarNivel(nivel:Int) {
+fun cargarNivel() {
 
     cargarTiles()
-
     if (jugador.x in 0..longitudNivel) {
 
-        objetos.clear()
-        objetos = niveles.Niveles[nivelActual - 1]
         for (objeto in objetos)
             println(objeto.toString())
 
         sleep(15)
-        cargarObjetos()
+        cargarObjetos(objetos)
 
     }
     else if (jugador.x>longitudNivel){
-        nivelActual=nivelActual+1
+        objetos.clear()
+        nivelActual++
+        objetos = niveles.Niveles[nivelActual - 1]
         jugador.x=0
     }
     else if (jugador.x<0){
-        nivelActual=nivelActual-1
+        objetos.clear()
+        nivelActual--
+        objetos = niveles.Niveles[nivelActual - 1]
         jugador.x=longitudNivel
     }
 }
@@ -164,7 +180,13 @@ fun cargarTiles(){
 
 }
 
-fun cargarObjetos(){
+fun cargarObjetos(objetos: ArrayList<Objetos>){
+
+    for (objeto in objetos){
+        when(objeto.tipo){
+            "enemigo"->enemigos.add(objeto)
+        }
+    }
 
     cargarObstaculos()
     cargarPickeables()
@@ -175,6 +197,7 @@ fun cargarObjetos(){
 }
 
 fun cargarEnemigos(){
+    en1.moverse(jugador)
 }
 
 fun cargarNPCS(){
