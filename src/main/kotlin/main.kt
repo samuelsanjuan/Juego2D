@@ -1,33 +1,92 @@
+import java.awt.Button
+import java.awt.GridLayout
 import java.io.File
+import java.lang.Thread.sleep
 import java.util.*
+import javax.swing.JFrame
+import javax.swing.JPanel
 
-var jugando:Boolean=false
 var enEjecucion=false
-var objetos=ArrayList<Objetos>()
 val niveles=Niveles()
+var jugando:Boolean=false
+var objetos=ArrayList<Objetos>()
 val ArchivoNivel= File("src/main/resources/Partida.txt")
-var nivelActual = ArchivoNivel.inputStream().bufferedReader().readLine()
+var nivelActual = ArchivoNivel.inputStream().bufferedReader().readLine().toInt()
 val jugador=Jugador(1,1)
-val ventana:Ventana= Ventana()
 val longitudNivel=100
+var menuOpcion:String="jugar"
 
+val ventana = JFrame("juego")
+val menu = JPanel()
+val botonJugar = Button("Jugar")
+val botonOpciones = Button("Opciones")
+val botonSalir = Button("Salir")
 
 fun main(args: Array<String>) {
-    enEjecucion=true
-    ventana.inicializarVentana(720,480)
 
-    print(nivelActual)
-    if(enEjecucion){
+        ventana.setSize(720, 480)
+        ventana.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
+        ventana.addKeyListener(ControlesTeclado)
+
+        menu.layout = GridLayout(3, 1)
+        menu.add(botonJugar)
+        menu.add(botonOpciones)
+        menu.add(botonSalir)
+        ventana.add(menu)
+    ventana.isVisible=true
+
+        botonJugar.addActionListener() {
+            menuOpcion="jugar"
+        }
+
+        botonOpciones.addActionListener() {
+            menuOpcion="opciones"
+        }
+
+        botonSalir.addActionListener() {
+            menuOpcion="salir"
+        }
+
+
+    enEjecucion=true
+    print("$nivelActual ")
+    println(menuOpcion)
+
+    while(enEjecucion){
         menu()
     }
+    println("adios")
 }
 
 fun menu(){
 
     jugando=false
 
-    ventana.menuVisible()
+    menu.isVisible = true
 
+    do{
+        when (menuOpcion) {
+
+            "jugar" -> {
+                jugando=true
+                menu.isVisible=false
+                jugar()
+            }
+
+            "opciones" -> {
+                abrirAjustes()
+            }
+
+            "salir" -> {
+                guardarSalir()
+            }
+
+            else -> {
+                println("error")
+            }
+        }
+
+    }while (menuOpcion != "jugar" || menuOpcion != "opciones" || menuOpcion != "salir")
 }
 
 
@@ -39,7 +98,7 @@ fun guardarSalir(){
 fun guardar(){
     ArchivoNivel.delete()
     ArchivoNivel.createNewFile()
-    ArchivoNivel.writeText(nivelActual)
+    ArchivoNivel.writeText(nivelActual.toString())
 }
 
 fun salir(){
@@ -47,19 +106,8 @@ fun salir(){
 }
 
 
-fun opciones(){
-    abrirAjustes()
-}
-
 fun abrirAjustes(){
-    var ajuste:String="resolucion"
-    when(ajuste){
 
-        "resolucion"->ajustesResolucion()
-        "audio"->ajustesAudio()
-        "controles"->ajustesControles()
-        "back"->menu()
-    }
 }
 
 fun ajustesAudio(){
@@ -70,44 +118,44 @@ fun ajustesControles(){
     println("ajustando controles")
 }
 
-fun ajustesResolucion(){
+fun ajustesResolucion(width:Int,height:Int){
     println("ajustando resolucion")
 
-    ventana.changeResoulution(1000,1000)
+    ventana.setSize(width,height)
 }
 
 
 fun jugar(){
 
-    ventana.menuInvisible()
-
-    jugando= true
-
     while (jugando==true) {
-        cargarNivel()
+        cargarNivel(nivelActual)
     }
+
     menu()
 }
 
 
-fun cargarNivel() {
+fun cargarNivel(nivel:Int) {
+
+    cargarTiles()
 
     if (jugador.x in 0..longitudNivel) {
 
         objetos.clear()
-        objetos = niveles.Niveles[nivelActual.toInt() - 1]
+        objetos = niveles.Niveles[nivelActual - 1]
         for (objeto in objetos)
             println(objeto.toString())
-        cargarTiles()
 
-        realentizar()
+        sleep(15)
+        cargarObjetos()
+
     }
     else if (jugador.x>longitudNivel){
-        nivelActual="${nivelActual.toInt()+1}"
+        nivelActual=nivelActual+1
         jugador.x=0
     }
     else if (jugador.x<0){
-        nivelActual="${nivelActual.toInt()-1}"
+        nivelActual=nivelActual-1
         jugador.x=longitudNivel
     }
 }
@@ -137,44 +185,13 @@ fun cargarPickeables(){
 
 fun cargarJugador(){
 
+    ControlesTeclado.actualizar()
     jugador.actualizar()
     if (ControlesTeclado.menu==true){
         jugando=false
+        menuOpcion=""
     }
 }
 
 fun cargarObstaculos(){
-}
-
-
-fun realentizar() {
-
-    val nsPorSegundo = 1000000000
-    val apsObjetivo: Byte = 60
-    val nsPorActualizacion = (nsPorSegundo / apsObjetivo).toDouble()
-
-    var referenciaActualizacion = System.nanoTime()
-    var referenciaContador = System.nanoTime()
-
-    var tiempoTranscurrido: Double
-    var delta = 0.0
-
-    while (jugando&&jugador.x in 0..longitudNivel) {
-
-        val inicioBucle = System.nanoTime()
-
-        tiempoTranscurrido = (inicioBucle - referenciaActualizacion).toDouble()
-        referenciaActualizacion = inicioBucle
-
-        delta += tiempoTranscurrido / nsPorActualizacion
-
-        while (delta >= 1) {
-            cargarObjetos()
-            delta--
-        }
-
-        if (System.nanoTime() - referenciaContador > nsPorSegundo) {
-            referenciaContador = System.nanoTime()
-        }
-    }
 }
