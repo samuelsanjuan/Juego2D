@@ -50,7 +50,7 @@ class Enemigo (x:Int, y:Int, movimiento:Int, agro:Int, rango:Int, hitboxX:Int, h
         if (abs(jugador.x-this.x)<rangoAtaque && abs(jugador.y-this.y)<rangoAtaque){
             jugador.vida=jugador.vida-this.daño
 
-        }else if (jugador.x in SpawnX+radioAgro..SpawnX-radioAgro && jugador.y in SpawnY+radioAgro..SpawnY-radioAgro){
+        }else if (jugador.x in SpawnX-radioAgro..SpawnX+radioAgro && jugador.y in SpawnY-radioAgro..SpawnY+radioAgro){
             if(jugador.x-this.x>0){
                 this.x++
             }else if (jugador.x-this.x<0){
@@ -61,6 +61,7 @@ class Enemigo (x:Int, y:Int, movimiento:Int, agro:Int, rango:Int, hitboxX:Int, h
             }else if (jugador.y-this.y<0){
                 this.y--
             }
+            println("persiguiendo")
         }
 
     }
