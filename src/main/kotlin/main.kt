@@ -148,13 +148,13 @@ fun ajustesResolucion(width:Int,height:Int){
 fun jugar(){
 
     while (jugando==true) {
-        cargarTiles(nivelActual)
-        cargarNivel(nivelActual)
+        cargarTiles()
+        cargarNivel()
     }
     menu()
 }
 
-fun cargarNivel(Nivel:Int) {
+fun cargarNivel() {
 
     while (jugador.x in 0..longitudNivel&&jugando==true){
 
@@ -181,7 +181,7 @@ fun actualizarNivel(){
     obstaculos=ObstaculosDel[nivelActual]
 }
 
-fun cargarTiles(nivel:Int){
+fun cargarTiles(){
 }
 
 fun cargarObjetos(){
