@@ -17,7 +17,7 @@ var nivelActual = ArchivoNivel.inputStream().bufferedReader().readLine().toInt()
 
 
 //logitud del mapa
-val longitudNivel=1000
+val longitudNivel=200
 
 //opciones para los menus
 var menuOpcion:String=""
@@ -156,7 +156,7 @@ fun jugar(){
 
 fun cargarNivel(Nivel:Int) {
 
-    while (jugador.x in 0..longitudNivel){
+    while (jugador.x in 0..longitudNivel&&jugando==true){
 
         sleep(15)
         cargarObjetos()
@@ -172,7 +172,6 @@ fun cargarNivel(Nivel:Int) {
         actualizarNivel()
         jugador.x=longitudNivel
     }
-    else println("ERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERROR")
 }
 
 fun actualizarNivel(){
