@@ -3,14 +3,13 @@ import java.lang.Math.random
 import java.lang.Thread.sleep
 
 
-class Enemigo (x:Int, y:Int, movimiento:Int, agro:Int, rango:Int, hitboxX:Int, hitboxY:Int,daño:Int,vision:Int):Objetos(x,y,"Enemigo",true,hitboxX,hitboxY){
+class Enemigo (x:Int, y:Int, movimiento:Int, agro:Int, rango:Int, hitboxX:Int, hitboxY:Int, var damage: Int, val vision: Int, val nombre: String
+):Objetos(x,y,"Enemigo",true,hitboxX,hitboxY){
 
-    val SpawnX=x
-    val SpawnY=y
+    val spawnX=x
+    val spawnY=y
 
     val solido=true
-    val vision=vision
-    val daño= daño
 
     val radioMovimiento=movimiento
     val radioAgro=agro
@@ -20,25 +19,32 @@ class Enemigo (x:Int, y:Int, movimiento:Int, agro:Int, rango:Int, hitboxX:Int, h
 
     fun moverse(jugador: Jugador){
 
-        sleep(250)
-        println("E(${this.x}, ${this.y})")
+        println("$nombre(${x}, ${y})")
 
-        if (jugador.x in this.x-vision..this.x+vision && jugador.y in this.y-vision.. this.y+vision) {
+        if (jugador.x in x-vision..x+vision && jugador.y in y-vision.. y+vision) {
             detectado=true
         }
 
-
         if (detectado==false){
-            if(this.x in 1 .. longitudNivel){
+            if(x in 1 .. longitudNivel && y in 1..longitudNivel){
 
                 when((Math.floor(random() * (5 - 0)) + 0).toInt()){
-                    0->if (SpawnX+radioAgro>this.x++){this.x++}
-                    1->if (SpawnX-radioAgro<this.x--){this.x--}
-                    2->if (SpawnY+radioAgro>this.y++){this.y++}
-                    3->if (SpawnY-radioAgro<this.y--){this.y--}
-                    4-> println("enemigo no hizo nada")
+                    0->if (spawnX+radioMovimiento>(x+1)){
+                        x++
+                    }
+                    1->if (spawnX-radioMovimiento<(x-1)){
+                        x--
+                    }
+                    2->if (spawnY+radioMovimiento>(y+1)){
+                        y++
+                    }
+                    3->if (spawnY-radioMovimiento<(y-1)){
+                        y--
+                    }
+                    4-> print("")
             }
         }
+
     }else if (detectado==true){
         atacar(jugador)
 
@@ -47,19 +53,19 @@ class Enemigo (x:Int, y:Int, movimiento:Int, agro:Int, rango:Int, hitboxX:Int, h
 
     fun atacar(jugador: Jugador){
 
-        if (abs(jugador.x-this.x)<rangoAtaque && abs(jugador.y-this.y)<rangoAtaque){
-            jugador.vida=jugador.vida-this.daño
+        if (abs(jugador.x-x)<rangoAtaque && abs(jugador.y-y)<rangoAtaque){
+            jugador.vida=jugador.vida-damage
 
-        }else if (jugador.x in SpawnX-radioAgro..SpawnX+radioAgro && jugador.y in SpawnY-radioAgro..SpawnY+radioAgro){
-            if(jugador.x-this.x>0){
-                this.x++
-            }else if (jugador.x-this.x<0){
-                this.x--
+        }else if (jugador.x in spawnX-radioAgro..spawnX+radioAgro && jugador.y in spawnY-radioAgro..spawnY+radioAgro){
+            if(jugador.x-x>0){
+                x++
+            }else if (jugador.x-x<0){
+                x--
             }
-            if (jugador.y-this.y>0){
-                this.y++
-            }else if (jugador.y-this.y<0){
-                this.y--
+            if (jugador.y-y>0){
+                y++
+            }else if (jugador.y-y<0){
+                y--
             }
             println("persiguiendo")
         }

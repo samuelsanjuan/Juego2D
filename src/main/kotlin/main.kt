@@ -2,26 +2,39 @@ import java.awt.Button
 import java.awt.GridLayout
 import java.io.File
 import java.lang.Thread.sleep
-import java.util.*
 import javax.swing.JFrame
 import javax.swing.JPanel
 import kotlin.collections.ArrayList
 
-var enEjecucion=false
-val niveles=Niveles()
+//booleans de control del programa
+var enEjecucion=true
 var jugando:Boolean=false
-var objetos=ArrayList<Objetos>()
-var obstaculos=ArrayList<Objetos>()
-var enemigos=ArrayList<Objetos>()
+
+
+//fichero que guarda el nivel en el que te quedaste
 val ArchivoNivel= File("src/main/resources/Partida.txt")
 var nivelActual = ArchivoNivel.inputStream().bufferedReader().readLine().toInt()
-val jugador=Jugador(1,1)
-val longitudNivel=100
+
+
+//logitud del mapa
+val longitudNivel=1000
+
+//opciones para los menus
 var menuOpcion:String=""
 var ajustesOpcion:String=""
-val en1=Enemigo(50,50,2,4,2,1,1,10,5)
 
 
+//colecciones de objetos de los niveles
+
+val EnemigosDel=EnemigosNiveles().NivelesEnemigos
+val ObstaculosDel=ObstaculosNiveles().NivelesObstaculos
+
+val jugador=Jugador(12,50)
+var objetos=ArrayList<Objetos>()
+var obstaculos=ArrayList<Obstaculo>()
+var enemigos=ArrayList<Enemigo>()
+
+//objetos para los menus
 val ventana = JFrame("juego")
 val menu = JPanel()
 val botonJugar = Button("Jugar")
@@ -30,7 +43,7 @@ val botonSalir = Button("Salir")
 
 fun main() {
 
-
+    //inicializacion de la ventana de juego
     ventana.setSize(720, 480)
     ventana.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
     ventana.addKeyListener(ControlesTeclado)
@@ -43,27 +56,22 @@ fun main() {
 
     ventana.isVisible=true
 
-        botonJugar.addActionListener() {
-            menuOpcion="jugar"
-        }
+    botonJugar.addActionListener() {
+        menuOpcion="jugar"
+    }
 
-        botonOpciones.addActionListener() {
-            menuOpcion="opciones"
-        }
+    botonOpciones.addActionListener() {
+        menuOpcion="opciones"
+    }
 
-        botonSalir.addActionListener() {
-            menuOpcion="salir"
-        }
+    botonSalir.addActionListener() {
+        menuOpcion="salir"
+    }
 
-
-    enEjecucion=true
-    print("$nivelActual ")
-    println(menuOpcion)
-
+    //loop principal
     while(enEjecucion){
         menu()
     }
-    println("adios")
 }
 
 fun menu(){
@@ -86,7 +94,8 @@ fun menu(){
             }
 
             "salir" -> {
-                guardarSalir()
+                guardar()
+                salir()
             }
 
             else -> {
@@ -95,12 +104,6 @@ fun menu(){
         }
 
     }while (menuOpcion != "jugar" || menuOpcion != "opciones" || menuOpcion != "salir")
-}
-
-
-fun guardarSalir(){
-    guardar()
-    salir()
 }
 
 fun guardar(){
@@ -121,7 +124,7 @@ fun abrirAjustes(){
         when (ajustesOpcion){
             "audio"->ajustesAudio()
             "controles"->ajustesControles()
-            "resolucion"->ajustesResolucion(100,100)
+            "resolucion"->ajustesResolucion(1420,840)
         }
     }while (ajustesOpcion!="audio"||ajustesOpcion!="controles"||ajustesOpcion!="resolucion")
 
@@ -141,52 +144,48 @@ fun ajustesResolucion(width:Int,height:Int){
     ventana.setSize(width,height)
 }
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 fun jugar(){
 
     while (jugando==true) {
-        cargarNivel()
+        cargarTiles(nivelActual)
+        cargarNivel(nivelActual)
     }
     menu()
 }
 
-fun cargarNivel() {
+fun cargarNivel(Nivel:Int) {
 
-    cargarTiles()
-    if (jugador.x in 0..longitudNivel) {
-
-        for (objeto in objetos)
-            println(objeto.toString())
+    while (jugador.x in 0..longitudNivel){
 
         sleep(15)
-        cargarObjetos(objetos)
+        cargarObjetos()
 
     }
-    else if (jugador.x>longitudNivel){
-        objetos.clear()
+    if (jugador.x>longitudNivel){
         nivelActual++
-        objetos = niveles.Niveles[nivelActual - 1]
+        actualizarNivel()
         jugador.x=0
     }
     else if (jugador.x<0){
-        objetos.clear()
         nivelActual--
-        objetos = niveles.Niveles[nivelActual - 1]
+        actualizarNivel()
         jugador.x=longitudNivel
     }
+    else println("ERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERRORERROR")
 }
 
-fun cargarTiles(){
-
+fun actualizarNivel(){
+    enemigos.clear()
+    obstaculos.clear()
+    enemigos=EnemigosDel[nivelActual]
+    obstaculos=ObstaculosDel[nivelActual]
 }
 
-fun cargarObjetos(objetos: ArrayList<Objetos>){
+fun cargarTiles(nivel:Int){
+}
 
-    for (objeto in objetos){
-        when(objeto.tipo){
-            "enemigo"->enemigos.add(objeto)
-        }
-    }
+fun cargarObjetos(){
 
     cargarObstaculos()
     cargarPickeables()
@@ -197,7 +196,9 @@ fun cargarObjetos(objetos: ArrayList<Objetos>){
 }
 
 fun cargarEnemigos(){
-    en1.moverse(jugador)
+    for (enemigo in enemigos){
+        enemigo.moverse(jugador)
+    }
 }
 
 fun cargarNPCS(){
