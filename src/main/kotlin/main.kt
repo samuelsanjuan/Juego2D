@@ -1,6 +1,7 @@
 import java.awt.Button
 import java.awt.GridLayout
 import java.awt.Toolkit
+import java.awt.image.BufferedImage
 import java.io.File
 import java.lang.Thread.sleep
 import javax.swing.ImageIcon
@@ -67,7 +68,6 @@ fun main() {
     menu.add(botonJugar)
     menu.add(botonOpciones)
     menu.add(botonSalir)
-    ventana.add(graficosJuego)
     ventana.add(menu)
 
     ventana.isVisible=true
@@ -93,7 +93,6 @@ fun main() {
 fun menu(){
 
     jugando=false
-    graficosJuego.isVisible=false
     menu.isVisible = true
 
     do{
@@ -163,19 +162,20 @@ fun ajustesResolucion(width:Int,height:Int){
 /////////////////////////////////////// METODO JUGAR /////////////////////////////////////////////////////////////////
 fun jugar(){
 
-    graficosJuego.isVisible=true
-
     while (jugando==true) {
+
         cargarTiles()
-        cargarNivel()
         mostrar()
+        cargarNivel()
     }
     menu()
 }
 
 fun mostrar(){
 
+
     graficosJuego= JLabel(iconoPrincipal)
+    ventana.add(graficosJuego)
 
 }
 
@@ -183,8 +183,11 @@ fun cargarNivel() {
 
     while (jugador.x in 0..longitudNivel&&jugando==true){
 
-        sleep(15)
+
         cargarObjetos()
+        mostrar()
+        sleep(15)
+        iconoPrincipal=ImageIcon(BufferedImage(1000,1000, BufferedImage.TYPE_INT_RGB))
 
     }
     if (jugador.x>longitudNivel){
@@ -207,7 +210,7 @@ fun actualizarNivel(){
 }
 
 fun cargarTiles(){
-    iconoPrincipal= graficos.tiles[nivelActual]
+
 }
 
 fun cargarObjetos(){
@@ -235,6 +238,7 @@ fun cargarPickeables(){
 
 fun cargarJugador(){
 
+    iconoPrincipal=Graficos.combinar2Imagenes(jugador.x,jugador.y,iconoPrincipal,jugador.textura)
     ControlesTeclado.actualizar()
     jugador.actualizar()
     if (ControlesTeclado.menu==true){

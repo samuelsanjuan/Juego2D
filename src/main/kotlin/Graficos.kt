@@ -1,7 +1,9 @@
 import java.awt.Color
 import java.awt.Graphics
+import java.awt.Graphics2D
 import java.awt.image.BufferedImage
 import javax.swing.ImageIcon
+
 
 object Graficos {
 
@@ -32,6 +34,18 @@ object Graficos {
         g.dispose()
 
         return bi
+    }
+
+    fun clearBufferedImage(icono:ImageIcon):ImageIcon{
+        val bufferedImage = iconToBufferedImage(icono)
+        val g: Graphics2D = bufferedImage.createGraphics()
+        g.background = Color(0, 0, 0, 0)
+        g.clearRect(
+            0, 0, bufferedImage.getWidth(),
+            bufferedImage.getHeight()
+        )
+        g.dispose()
+        return ImageIcon(bufferedImage)
     }
 }
 
