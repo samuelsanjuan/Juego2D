@@ -1,6 +1,9 @@
+import javax.swing.ImageIcon
+
 class Jugador (x:Int, y:Int):Objetos(x,y,"Jugador",true,hitboxX = 1,hitboxY = 1){
 
     var enMovimiento=false
+    val textura=ImageIcon("src/main/resources/Player.png")
 
     //stats
 

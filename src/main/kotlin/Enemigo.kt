@@ -1,7 +1,8 @@
 import java.lang.Math.abs
 import java.lang.Math.random
+import javax.swing.ImageIcon
 
-class Enemigo (x:Int,y:Int, val movimiento: Int, val agro: Int, val rango: Int, hitboxX:Int, hitboxY:Int, var damage: Int, val vision: Int, val nombre: String) :Objetos(x,y,"Enemigo",true,hitboxX,hitboxY){
+class Enemigo (x:Int,y:Int, val movimiento: Int, val agro: Int, val rango: Int, hitboxX:Int, hitboxY:Int, var damage: Int, val vision: Int, val nombre: String,val textura:ImageIcon) :Objetos(x,y,"Enemigo",true,hitboxX,hitboxY){
 
     val spawnX=x
     val spawnY=y

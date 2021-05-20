@@ -1,8 +1,8 @@
 class EnemigosNiveles(){
 
-    val enemigo0=Enemigo(100,100,3,8000,8000,1,1,500,8000,"EasterEgg")
-    val enemigoDefault1=Enemigo(50,50,3,10,1,1,1,10,5,"Enemigo1")
-    val enemigoDefault2=Enemigo(90,90,3,10,1,1,1,10,5,"Enemigo2")
+    val enemigo0=Enemigo(100,100,3,8000,8000,1,1,500,8000,"EasterEgg",graficos.enemigos[0])
+    val enemigoDefault1=Enemigo(50,50,3,10,1,1,1,10,5,"Enemigo1",graficos.enemigos[0])
+    val enemigoDefault2=Enemigo(90,90,3,10,1,1,1,10,5,"Enemigo2",graficos.enemigos[0])
 
     val NivelesEnemigos=ArrayList<ArrayList<Enemigo>>()
 

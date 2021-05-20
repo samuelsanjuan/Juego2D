@@ -1,8 +1,11 @@
 import java.awt.Button
 import java.awt.GridLayout
+import java.awt.Toolkit
 import java.io.File
 import java.lang.Thread.sleep
+import javax.swing.ImageIcon
 import javax.swing.JFrame
+import javax.swing.JLabel
 import javax.swing.JPanel
 import kotlin.collections.ArrayList
 
@@ -19,13 +22,23 @@ var nivelActual = ArchivoNivel.inputStream().bufferedReader().readLine().toInt()
 //logitud del mapa
 val longitudNivel=200
 
+
+//tamaño de la ventana
+val screenSize = Toolkit.getDefaultToolkit().screenSize
+val width = screenSize.width
+val height = screenSize.height
+
+
 //opciones para los menus
 var menuOpcion:String=""
 var ajustesOpcion:String=""
 
+//coleccion de graficos
+val graficos:ColeccionDeGraficos=ColeccionDeGraficos()
+var iconoPrincipal:ImageIcon=ImageIcon()
+
 
 //colecciones de objetos de los niveles
-
 val EnemigosDel=EnemigosNiveles().NivelesEnemigos
 val ObstaculosDel=ObstaculosNiveles().NivelesObstaculos
 
@@ -36,6 +49,7 @@ var enemigos=ArrayList<Enemigo>()
 
 //objetos para los menus
 val ventana = JFrame("juego")
+var graficosJuego=JLabel()
 val menu = JPanel()
 val botonJugar = Button("Jugar")
 val botonOpciones = Button("Opciones")
@@ -44,27 +58,29 @@ val botonSalir = Button("Salir")
 fun main() {
 
     //inicializacion de la ventana de juego
-    ventana.setSize(720, 480)
+    ventana.setSize(width, height)
     ventana.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
     ventana.addKeyListener(ControlesTeclado)
+    graficosJuego.addKeyListener(ControlesTeclado)
 
     menu.layout = GridLayout(3, 1)
     menu.add(botonJugar)
     menu.add(botonOpciones)
     menu.add(botonSalir)
+    ventana.add(graficosJuego)
     ventana.add(menu)
 
     ventana.isVisible=true
 
-    botonJugar.addActionListener() {
+    botonJugar.addActionListener{
         menuOpcion="jugar"
     }
 
-    botonOpciones.addActionListener() {
+    botonOpciones.addActionListener{
         menuOpcion="opciones"
     }
 
-    botonSalir.addActionListener() {
+    botonSalir.addActionListener{
         menuOpcion="salir"
     }
 
@@ -77,7 +93,7 @@ fun main() {
 fun menu(){
 
     jugando=false
-
+    graficosJuego.isVisible=false
     menu.isVisible = true
 
     do{
@@ -144,14 +160,23 @@ fun ajustesResolucion(width:Int,height:Int){
     ventana.setSize(width,height)
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////// METODO JUGAR /////////////////////////////////////////////////////////////////
 fun jugar(){
+
+    graficosJuego.isVisible=true
 
     while (jugando==true) {
         cargarTiles()
         cargarNivel()
+        mostrar()
     }
     menu()
+}
+
+fun mostrar(){
+
+    graficosJuego= JLabel(iconoPrincipal)
+
 }
 
 fun cargarNivel() {
@@ -182,6 +207,7 @@ fun actualizarNivel(){
 }
 
 fun cargarTiles(){
+    iconoPrincipal= graficos.tiles[nivelActual]
 }
 
 fun cargarObjetos(){
@@ -197,6 +223,7 @@ fun cargarObjetos(){
 fun cargarEnemigos(){
     for (enemigo in enemigos){
         enemigo.moverse(jugador)
+        iconoPrincipal = Graficos.combinar2Imagenes(enemigo.x,enemigo.y, iconoPrincipal,enemigo.textura)
     }
 }
 
