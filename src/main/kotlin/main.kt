@@ -12,32 +12,22 @@ import kotlin.collections.ArrayList
 
 //booleans de control del programa
 var enEjecucion=true
-var jugando:Boolean=false
-
+var jugando=false
 
 //fichero que guarda el nivel en el que te quedaste
 val ArchivoNivel= File("src/main/resources/Partida.txt")
 var nivelActual = ArchivoNivel.inputStream().bufferedReader().readLine().toInt()
 
-
 //logitud del mapa
 val longitudNivel=200
-
-
-//tamaño de la ventana
-val screenSize = Toolkit.getDefaultToolkit().screenSize
-val width = screenSize.width
-val height = screenSize.height
-
 
 //opciones para los menus
 var menuOpcion:String=""
 var ajustesOpcion:String=""
 
 //coleccion de graficos
-val graficos:ColeccionDeGraficos=ColeccionDeGraficos()
-var iconoPrincipal:ImageIcon=ImageIcon()
-
+val graficos=ColeccionDeGraficos()
+var iconoPrincipal=ImageIcon()
 
 //colecciones de objetos de los niveles
 val EnemigosDel=EnemigosNiveles().NivelesEnemigos
@@ -59,6 +49,9 @@ val botonSalir = Button("Salir")
 fun main() {
 
     //inicializacion de la ventana de juego
+    val screenSize = Toolkit.getDefaultToolkit().screenSize
+    val width = screenSize.width
+    val height = screenSize.height
     ventana.setSize(width, height)
     ventana.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
     ventana.addKeyListener(ControlesTeclado)
@@ -165,7 +158,6 @@ fun jugar(){
     while (jugando==true) {
 
         cargarTiles()
-        mostrar()
         cargarNivel()
     }
     menu()
@@ -173,9 +165,10 @@ fun jugar(){
 
 fun mostrar(){
 
-
+    ventana.remove(graficosJuego)
     graficosJuego= JLabel(iconoPrincipal)
     ventana.add(graficosJuego)
+    ventana.isVisible=true
 
 }
 
@@ -211,6 +204,8 @@ fun actualizarNivel(){
 
 fun cargarTiles(){
 
+    iconoPrincipal=graficos.tiles[nivelActual]
+    mostrar()
 }
 
 fun cargarObjetos(){
@@ -226,7 +221,7 @@ fun cargarObjetos(){
 fun cargarEnemigos(){
     for (enemigo in enemigos){
         enemigo.moverse(jugador)
-        iconoPrincipal = Graficos.combinar2Imagenes(enemigo.x,enemigo.y, iconoPrincipal,enemigo.textura)
+       iconoPrincipal = Graficos.combinar2Imagenes(enemigo.x,enemigo.y, iconoPrincipal,enemigo.textura)
     }
 }
 
