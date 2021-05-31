@@ -19,7 +19,7 @@ val ArchivoNivel= File("src/main/resources/Partida.txt")
 var nivelActual = ArchivoNivel.inputStream().bufferedReader().readLine().toInt()
 
 //logitud del mapa
-val longitudNivel=200
+val longitudNivel=250
 
 //opciones para los menus
 var menuOpcion:String=""
@@ -28,10 +28,6 @@ var ajustesOpcion:String=""
 //coleccion de graficos
 val graficos=ColeccionDeGraficos()
 var iconoPrincipal=ImageIcon()
-
-//colecciones de objetos de los niveles
-val EnemigosDel=EnemigosNiveles().NivelesEnemigos
-val ObstaculosDel=ObstaculosNiveles().NivelesObstaculos
 
 val jugador=Jugador(12,50)
 var objetos=ArrayList<Objetos>()
@@ -176,11 +172,10 @@ fun cargarNivel() {
 
     while (jugador.x in 0..longitudNivel&&jugando==true){
 
-
         cargarObjetos()
         mostrar()
         sleep(15)
-        iconoPrincipal=ImageIcon(BufferedImage(1000,1000, BufferedImage.TYPE_INT_RGB))
+        iconoPrincipal=graficos.tiles[nivelActual]
 
     }
     if (jugador.x>longitudNivel){
@@ -196,6 +191,10 @@ fun cargarNivel() {
 }
 
 fun actualizarNivel(){
+
+    val EnemigosDel=EnemigosNiveles().NivelesEnemigos
+    val ObstaculosDel=ObstaculosNiveles().NivelesObstaculos
+
     enemigos.clear()
     obstaculos.clear()
     enemigos=EnemigosDel[nivelActual]
@@ -204,8 +203,10 @@ fun actualizarNivel(){
 
 fun cargarTiles(){
 
+
     iconoPrincipal=graficos.tiles[nivelActual]
     mostrar()
+
 }
 
 fun cargarObjetos(){
@@ -233,7 +234,13 @@ fun cargarPickeables(){
 
 fun cargarJugador(){
 
-    iconoPrincipal=Graficos.combinar2Imagenes(jugador.x,jugador.y,iconoPrincipal,jugador.textura)
+
+    if (jugador.vida>0){
+        iconoPrincipal=Graficos.combinar2Imagenes(jugador.x,jugador.y,iconoPrincipal,jugador.textura)
+    }
+    else{
+        iconoPrincipal=Graficos.combinar2Imagenes(jugador.x,jugador.y,iconoPrincipal,jugador.textura)
+    }
     ControlesTeclado.actualizar()
     jugador.actualizar()
     if (ControlesTeclado.menu==true){
@@ -243,4 +250,8 @@ fun cargarJugador(){
 }
 
 fun cargarObstaculos(){
+
+    for (objeto in objetos){
+        iconoPrincipal = Graficos.combinar2Imagenes(enemigo.x,enemigo.y, iconoPrincipal,enemigo.textura)
+    }
 }
