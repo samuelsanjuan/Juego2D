@@ -68,7 +68,6 @@ fun main() {
     botonOpciones.addActionListener{
         menuOpcion="opciones"
     }
-
     botonSalir.addActionListener{
         menuOpcion="salir"
     }
@@ -251,7 +250,7 @@ fun cargarJugador(){
 
 fun cargarObstaculos(){
 
-    for (objeto in objetos){
-        iconoPrincipal = Graficos.combinar2Imagenes(enemigo.x,enemigo.y, iconoPrincipal,enemigo.textura)
+    for (obstaculo in obstaculos){
+    //    iconoPrincipal = Graficos.combinar2Imagenes(obstaculo.x,obstaculo.y, iconoPrincipal,obstaculo.textura)
     }
 }

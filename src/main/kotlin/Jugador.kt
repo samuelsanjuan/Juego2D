@@ -3,7 +3,7 @@ import javax.swing.ImageIcon
 class Jugador (x:Int, y:Int):Objetos(x,y,"Jugador",true,hitboxX = 1,hitboxY = 1){
 
     var enMovimiento=false
-    val textura=ImageIcon("src/main/resources/Player.png")
+    var textura=ImageIcon("src/main/resources/Player.png")
 
     //stats
 
@@ -12,6 +12,16 @@ class Jugador (x:Int, y:Int):Objetos(x,y,"Jugador",true,hitboxX = 1,hitboxY = 1)
 
     fun actualizar(){
 
+     /*   if (vida>100){
+            textura=ImageIcon("src/main/resources/Player.png")
+
+        }else if (vida >50){
+            textura=ImageIcon("src/main/resources/Npc.png")
+
+        }else if (vida >25){
+            textura=ImageIcon("src/main/resources/DeadPlayer.png")
+
+        }*/
         var desplazamientoX=0
         var desplazamientoY=0
 
