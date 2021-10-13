@@ -202,7 +202,6 @@ fun actualizarNivel(){
 
 fun cargarTiles(){
 
-
     iconoPrincipal=graficos.tiles[nivelActual]
     mostrar()
 

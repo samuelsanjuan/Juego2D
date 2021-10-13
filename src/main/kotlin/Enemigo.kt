@@ -14,9 +14,11 @@ class Enemigo (x:Int,y:Int, val movimiento: Int, val agro: Int, val rango: Int, 
 
         println("$nombre($x, $y) ${jugador.vida}")
 
-        if (jugador.x in x-vision..x+vision && jugador.y in y-vision.. y+vision) {
+        if (jugador.x in x-vision..x+vision+hitboxX && jugador.y in y-vision.. y+vision+hitboxY) {
             detectado=true
         }
+
+        jugador.damaged=false
 
         if (detectado==false){
             if(x in 1 .. longitudNivel && y in 1..longitudNivel){
@@ -44,6 +46,7 @@ class Enemigo (x:Int,y:Int, val movimiento: Int, val agro: Int, val rango: Int, 
 
     }
         else if (detectado==true){
+
             atacar(jugador)
         }
     }
@@ -52,6 +55,7 @@ class Enemigo (x:Int,y:Int, val movimiento: Int, val agro: Int, val rango: Int, 
 
         if (abs(jugador.x-x)<rango && abs(jugador.y-y)<rango){
             jugador.vida=jugador.vida-damage
+            jugador.damaged= true
 
         }else if (jugador.x in spawnX-agro..spawnX+agro && jugador.y in spawnY-agro..spawnY+agro){
             if(jugador.x-x>0){

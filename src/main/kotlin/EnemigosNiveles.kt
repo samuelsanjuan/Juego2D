@@ -4,8 +4,8 @@ class EnemigosNiveles(){
     val graficos=ColeccionDeGraficos()
 
     val enemigo0=Enemigo(100,100,3,8000,8000,1,1,500,8000,"EasterEgg",graficos.enemigos[0])
-    val enemigoDefault1=Enemigo(50,50,20,30,3,1,1,10,20,"Enemigo1",graficos.enemigos[0])
-    val enemigoDefault2=Enemigo(90,90,20,30,3,1,1,10,20,"Enemigo2",graficos.enemigos[0])
+    val enemigoDefault1=Enemigo(50,50,20,30,3,16,16,10,20,"Enemigo1",graficos.enemigos[0])
+    val enemigoDefault2=Enemigo(90,90,20,30,3,16,16,10,20,"Enemigo2",graficos.enemigos[0])
 
     val NivelesEnemigos=ArrayList<ArrayList<Enemigo>>()
 
